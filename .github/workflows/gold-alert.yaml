@@ -1,0 +1,39 @@
+name: Gold Price Alert
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+
+jobs:
+  run-alert:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.21"
+
+      - name: Restore alert state
+        uses: actions/cache@v4
+        with:
+          path: state.json
+          key: gold-alert-state
+
+      - name: Run alert job
+        env:
+          GOLD_API_KEY: ${{ secrets.GOLD_API_KEY }}
+          PUSHOVER_APP_TOKEN: ${{ secrets.PUSHOVER_APP_TOKEN }}
+          PUSHOVER_USER_KEY: ${{ secrets.PUSHOVER_USER_KEY }}
+        run: |
+          go run main.go
+
+      - name: Save alert state
+        uses: actions/cache@v4
+        with:
+          path: state.json
+          key: gold-alert-state
