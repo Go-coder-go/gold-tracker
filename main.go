@@ -13,7 +13,7 @@ const (
 	stateFile = "state.json"
 
 	// 🔔 ALERT CONFIG (22K gold price)
-	targetGoldPrice22K = 12700.0
+	targetGoldPrice22K = 13900.0
 	resetBuffer        = 200.0
 )
 
